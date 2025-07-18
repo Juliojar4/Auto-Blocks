@@ -4,56 +4,10 @@
  * Execute este arquivo no diretório raiz do seu tema Sage/Acorn
  */
 
-// Verificar se o composer autoload existe
-$autoloadPaths = [
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ . '/../../vendor/autoload.php',
-    __DIR__ . '/../../../vendor/autoload.php',
-    __DIR__ . '/../../../../vendor/autoload.php',
-];
-
-$autoloadFound = false;
-foreach ($autoloadPaths as $path) {
-    if (file_exists($path)) {
-        require_once $path;
-        $autoloadFound = true;
-        break;
-    }
-}
-
-if (!$autoloadFound) {
-    echo "❌ Autoload do Composer não encontrado!\n";
-    echo "Certifique-se de que o composer install foi executado.\n";
-    exit(1);
-}
-
 echo "🎨 Executando instalação manual do Auto Blocks...\n\n";
 
-try {
-    // Simular evento do Composer
-    $composer = new \Composer\Composer();
-    $io = new \Composer\IO\ConsoleIO(
-        new \Symfony\Component\Console\Input\ArrayInput([]),
-        new \Symfony\Component\Console\Output\ConsoleOutput(),
-        new \Symfony\Component\Console\Helper\HelperSet()
-    );
-    
-    $event = new \Composer\Script\Event(
-        'post-install-cmd',
-        $composer,
-        $io
-    );
-    
-    // Executar o installer
-    \Juliojar4\AutoBlocks\Installer::install($event);
-    
-} catch (Exception $e) {
-    echo "❌ Erro durante a instalação: " . $e->getMessage() . "\n";
-    echo "\nTentando instalação simplificada...\n";
-    
-    // Instalação simplificada
-    installSimplified();
-}
+// Executar instalação simplificada diretamente
+installSimplified();
 
 function installSimplified() {
     echo "🔧 Iniciando instalação simplificada...\n";
