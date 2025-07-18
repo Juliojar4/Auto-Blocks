@@ -67,10 +67,17 @@ else
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/blocks.js" ]; then
-    cp "$PACKAGE_DIR/stubs/blocks.js" "resources/blocks.js"
+    cp "$PACKAGE_DIR/stubs/blocks.js" "resources/js/blocks.js"
     echo "✅ blocks.js copiado"
 else
     echo "⚠️  blocks.js não encontrado"
+fi
+
+if [ -f "$PACKAGE_DIR/stubs/blocks.css" ]; then
+    cp "$PACKAGE_DIR/stubs/blocks.css" "resources/css/blocks.css"
+    echo "✅ blocks.css copiado"
+else
+    echo "⚠️  blocks.css não encontrado"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/vite.config.js" ]; then
