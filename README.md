@@ -15,7 +15,7 @@ Sistema completo de blocos Gutenberg customizados para WordPress com Sage/Acorn.
 ```bash
 # No diretório do seu tema Sage/Acorn
 composer config repositories.auto-blocks vcs https://github.com/Juliojar4/Auto-Blocks.git
-composer require juliojar4/auto-blocks:dev-main
+composer require juliojar4/auto-blocks:dev-master
 ```
 
 O instalador executará automaticamente e:
