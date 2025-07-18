@@ -1,0 +1,57 @@
+{
+    "name": "juliojar4/auto-blocks",
+    "description": "Sistema completo de blocos Gutenberg customizados para WordPress com Sage/Acorn - Instalação automática via Composer",
+    "type": "wordpress-package",
+    "license": "MIT",
+    "keywords": ["wordpress", "gutenberg", "blocks", "sage", "acorn", "laravel", "blade"],
+    "authors": [
+        {
+            "name": "Julio Jara",
+            "email": "julio@exemplo.com",
+            "homepage": "https://github.com/Juliojar4"
+        }
+    ],
+    "require": {
+        "php": "^8.0",
+        "roots/acorn": "^4.0|^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Juliojar4\\AutoBlocks\\": "src/"
+        }
+    },
+    "extra": {
+        "installer-name": "auto-blocks",
+        "auto-blocks": {
+            "files-to-copy": [
+                "stubs/BlockManager.php",
+                "stubs/MakeBlockCommand.php", 
+                "stubs/SyncBlocksCommand.php",
+                "stubs/blocks.js",
+                "stubs/vite.config.js",
+                "stubs/blocks.php"
+            ],
+            "directories-to-create": [
+                "resources/blocks",
+                "resources/views/blocks",
+                "public/build",
+                "app/Blocks",
+                "app/Console/Commands"
+            ]
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Juliojar4\\AutoBlocks\\Installer::install"
+        ],
+        "post-update-cmd": [
+            "Juliojar4\\AutoBlocks\\Installer::update"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "support": {
+        "issues": "https://github.com/Juliojar4/Auto-Blocks/issues",
+        "source": "https://github.com/Juliojar4/Auto-Blocks"
+    }
+}
