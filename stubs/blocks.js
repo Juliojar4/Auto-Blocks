@@ -2,7 +2,9 @@
  * Arquivo principal para registrar todos os blocos customizados
  * 
  * Os blocos serão automaticamente importados quando criados via:
- * php artisan make:block nome-do-bloco --with-js --with-css
+ * lando wp acorn make:block nome-do-bloco --with-js --with-css
+ * ou
+ * wp acorn make:block nome-do-bloco --with-js --with-css
  */
 
 // Importar estilos globais para os blocos no editor

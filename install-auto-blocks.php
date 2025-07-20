@@ -86,9 +86,17 @@ function installSimplified() {
     
     echo "\n✅ Instalação simplificada concluída!\n";
     echo "\n📋 Próximos passos:\n";
-    echo "  1. npm install\n";
-    echo "  2. npm run build\n";
-    echo "  3. php artisan make:block meu-primeiro-bloco --with-js --with-css\n";
-    echo "  4. npm run build\n";
-    echo "  5. Verificar no editor WordPress\n\n";
+    echo "\n🔧 Para ambientes com LANDO:\n";
+    echo "  1. yarn install\n";
+    echo "  2. yarn build\n";
+    echo "  3. lando wp acorn make:block meu-primeiro-bloco --with-js --with-css\n";
+    echo "  4. yarn build\n";
+    echo "  5. Verificar no editor WordPress\n";
+    echo "\n🔧 Para ambientes SEM LANDO:\n";
+    echo "  1. yarn install\n";
+    echo "  2. yarn build\n";
+    echo "  3. wp acorn make:block meu-primeiro-bloco --with-js --with-css\n";
+    echo "  4. yarn build\n";
+    echo "  5. Verificar no editor WordPress\n";
+    echo "\n⚠️  IMPORTANTE: NUNCA use 'php artisan' - use sempre 'lando wp acorn' ou 'wp acorn'\n\n";
 }
