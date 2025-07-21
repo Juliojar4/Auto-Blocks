@@ -56,5 +56,11 @@
     "support": {
         "issues": "https://github.com/Juliojar4/Auto-Blocks/issues",
         "source": "https://github.com/Juliojar4/Auto-Blocks"
+    },
+    "repositories": {
+        "auto-blocks": {
+            "type": "vcs",
+            "url": "https://github.com/Juliojar4/Auto-Blocks.git"
+        }
     }
 }

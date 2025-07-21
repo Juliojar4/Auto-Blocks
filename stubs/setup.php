@@ -1,5 +1,3 @@
-<?php
-
 use App\Blocks\BlockManager;
 
 /**
