@@ -1,19 +1,19 @@
 /**
- * Arquivo principal para registrar todos os blocos customizados
+ * Main file to register all custom blocks
  * 
- * Os blocos serão automaticamente importados quando criados via:
- * lando wp acorn make:block nome-do-bloco --with-js --with-css
- * ou
- * wp acorn make:block nome-do-bloco --with-js --with-css
+ * Blocks will be automatically imported when created via:
+ * lando wp acorn make:block block-name --with-js --with-css
+ * or
+ * wp acorn make:block block-name --with-js --with-css
  */
 
-// Importar estilos globais para os blocos no editor
+// Import global styles for blocks in editor
 import '../css/blocks.css';
 
-// Os imports dos blocos serão adicionados automaticamente aqui
-// Exemplo:
-// import '../blocks/meu-bloco/block.jsx';
+// Block imports will be automatically added here
+// Example:
+// import '../blocks/my-block/block.jsx';
 
-// AUTO-IMPORTS: Os blocos criados são importados automaticamente abaixo desta linha
+// AUTO-IMPORTS: Created blocks are automatically imported below this line
 
-console.log('🎨 Auto Blocks - Sistema carregado!');
+console.log('🎨 Auto Blocks - System loaded!');

@@ -3,86 +3,86 @@
 namespace App\Blocks;
 
 /**
- * Gerenciador de Blocos Customizados
+ * Custom Block Manager
  * 
- * Sistema simplificado: apenas liste os nomes dos blocos aqui
- * e ele automaticamente descobrirá todos os arquivos necessários
+ * Simplified system: just list block names here
+ * and it will automatically discover all necessary files
  */
 class BlockManager
 {
     /**
-     * Lista simples de blocos para registrar
-     * Apenas adicione o nome da pasta do bloco aqui!
+     * Simple list of blocks to register
+     * Just add the block folder name here!
      */
     protected array $blocks = [
-        // Adicione novos blocos aqui - apenas o nome da pasta!
-        // Exemplo: 'meu-bloco', 'text-block', 'hero-section'
+        // Add new blocks here - just the folder name!
+        // Example: 'my-block', 'text-block', 'hero-section'
     ];
 
     /**
-     * Namespace dos blocos
+     * Block namespace
      */
     protected string $namespace = 'doctailwind';
 
     /**
-     * Registrar todos os blocos automaticamente
+     * Register all blocks automatically
      */
     public function register(): void
     {
-        // Registrar blocos no WordPress
+        // Register blocks in WordPress
         foreach ($this->blocks as $blockName) {
             $this->registerSingleBlock($blockName);
         }
         
-        // Enfileirar assets
+        // Enqueue assets
         add_action('enqueue_block_editor_assets', [$this, 'enqueueAssets']);
     }
 
     /**
-     * Registrar um bloco individual
+     * Register a single block
      */
     protected function registerSingleBlock(string $blockName): void
     {
         $blockPath = get_template_directory() . "/resources/blocks/{$blockName}";
         
-        // Verificar se a pasta do bloco existe
+        // Check if block folder exists
         if (!is_dir($blockPath)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: Pasta do bloco '{$blockName}' não encontrada em {$blockPath}");
+                error_log("BlockManager: Block folder '{$blockName}' not found at {$blockPath}");
             }
             return;
         }
 
-        // Verificar se block.json existe
+        // Check if block.json exists
         $blockJsonPath = "{$blockPath}/block.json";
         if (!file_exists($blockJsonPath)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: block.json não encontrado para '{$blockName}' em {$blockJsonPath}");
+                error_log("BlockManager: block.json not found for '{$blockName}' at {$blockJsonPath}");
             }
             return;
         }
 
-        // Registrar o bloco usando o diretório
+        // Register block using directory
         $result = register_block_type($blockPath);
         
-        // Carregar assets específicos do bloco
+        // Load block-specific assets
         $this->enqueueBlockSpecificAssets($blockName);
         
         if (defined('WP_DEBUG') && WP_DEBUG) {
             if ($result) {
-                error_log("BlockManager: Bloco '{$blockName}' registrado com sucesso");
+                error_log("BlockManager: Block '{$blockName}' registered successfully");
             } else {
-                error_log("BlockManager: Falha ao registrar bloco '{$blockName}'");
+                error_log("BlockManager: Failed to register block '{$blockName}'");
             }
         }
     }
 
     /**
-     * Carregar assets globais dos blocos
+     * Load global block assets
      */
     public function enqueueAssets(): void
     {
-        // JavaScript global dos blocos
+        // Global block JavaScript
         $this->enqueueAsset('js', 'blocks', [
             'wp-blocks', 
             'wp-element', 
@@ -91,12 +91,12 @@ class BlockManager
             'wp-i18n'
         ]);
 
-        // CSS global dos blocos
+        // Global block CSS
         $this->enqueueAsset('css', 'blocks');
     }
 
     /**
-     * Carregar um asset (JS ou CSS)
+     * Load an asset (JS or CSS)
      */
     protected function enqueueAsset(string $type, string $name, array $dependencies = []): void
     {
@@ -104,7 +104,7 @@ class BlockManager
         
         if (!file_exists($manifestPath)) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: manifest.json não encontrado");
+                error_log("BlockManager: manifest.json not found");
             }
             return;
         }
@@ -114,7 +114,7 @@ class BlockManager
         
         if (!isset($manifest[$assetKey])) {
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: Asset '{$assetKey}' não encontrado no manifest");
+                error_log("BlockManager: Asset '{$assetKey}' not found in manifest");
             }
             return;
         }
@@ -141,26 +141,26 @@ class BlockManager
         }
 
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            error_log("BlockManager: Asset {$type} '{$name}' carregado: {$assetUrl}");
+            error_log("BlockManager: Asset {$type} '{$name}' loaded: {$assetUrl}");
         }
     }
 
     /**
-     * Obter versão do asset
+     * Get asset version
      */
     protected function getAssetVersion(array $assetInfo): string
     {
-        // Usar hash do arquivo se disponível
+        // Use file hash if available
         if (isset($assetInfo['file'])) {
             return hash('crc32', $assetInfo['file']);
         }
         
-        // Fallback para versão do tema
+        // Fallback to theme version
         return wp_get_theme()->get('Version') ?: '1.0.0';
     }
 
     /**
-     * Adicionar um novo bloco à lista
+     * Add a new block to the list
      */
     public function addBlock(string $blockName): void
     {
@@ -170,7 +170,7 @@ class BlockManager
     }
 
     /**
-     * Obter lista de blocos registrados
+     * Get list of registered blocks
      */
     public function getBlocks(): array
     {
@@ -178,7 +178,7 @@ class BlockManager
     }
 
     /**
-     * Obter namespace dos blocos
+     * Get block namespace
      */
     public function getNamespace(): string
     {
@@ -186,23 +186,23 @@ class BlockManager
     }
 
     /**
-     * Carregar assets específicos de um bloco
+     * Load block-specific assets
      */
     protected function enqueueBlockSpecificAssets(string $blockName): void
     {
-        // Hook para carregar assets no editor
+        // Hook to load assets in editor
         add_action('enqueue_block_editor_assets', function() use ($blockName) {
             $this->loadBlockAssets($blockName, 'editor');
         });
         
-        // Hook para carregar assets no frontend
+        // Hook to load assets on frontend
         add_action('wp_enqueue_scripts', function() use ($blockName) {
             $this->loadBlockAssets($blockName, 'frontend');
         });
     }
 
     /**
-     * Carregar assets JS e CSS de um bloco específico
+     * Load JS and CSS assets for a specific block
      */
     protected function loadBlockAssets(string $blockName, string $context = 'editor'): void
     {
@@ -214,7 +214,7 @@ class BlockManager
 
         $manifest = json_decode(file_get_contents($manifestPath), true);
         
-        // Carregar JavaScript específico do bloco
+        // Load block-specific JavaScript
         $jsKey = "resources/blocks/{$blockName}/block.js";
         if (isset($manifest[$jsKey])) {
             $assetInfo = $manifest[$jsKey];
@@ -229,11 +229,11 @@ class BlockManager
             );
             
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: JS específico carregado para '{$blockName}': {$assetUrl}");
+                error_log("BlockManager: Block-specific JS loaded for '{$blockName}': {$assetUrl}");
             }
         }
         
-        // Carregar CSS específico do bloco
+        // Load block-specific CSS
         $cssKey = "resources/blocks/{$blockName}/block.css";
         if (isset($manifest[$cssKey])) {
             $assetInfo = $manifest[$cssKey];
@@ -247,7 +247,7 @@ class BlockManager
             );
             
             if (defined('WP_DEBUG') && WP_DEBUG) {
-                error_log("BlockManager: CSS específico carregado para '{$blockName}': {$assetUrl}");
+                error_log("BlockManager: Block-specific CSS loaded for '{$blockName}': {$assetUrl}");
             }
         }
     }

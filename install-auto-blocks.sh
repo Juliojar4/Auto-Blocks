@@ -1,19 +1,19 @@
 #!/bin/bash
 
-echo "🎨 Auto Blocks - Instalação Manual"
-echo "=================================="
+echo "🎨 Auto Blocks - Manual Installation"
+echo "===================================="
 echo ""
 
-# Verificar se estamos em um tema Sage/Acorn
+# Check if we're in a Sage/Acorn theme
 if [ ! -f "style.css" ] || [ ! -f "functions.php" ] || [ ! -d "app" ]; then
-    echo "❌ Este não parece ser um diretório de tema Sage/Acorn válido."
-    echo "Certifique-se de estar no diretório raiz do tema (onde estão style.css e functions.php)."
+    echo "❌ This doesn't appear to be a valid Sage/Acorn theme directory."
+    echo "Make sure you're in the theme root directory (where style.css and functions.php are located)."
     exit 1
 fi
 
-echo "✅ Tema Sage/Acorn detectado!"
+echo "✅ Sage/Acorn theme detected!"
 
-# Encontrar o diretório do pacote
+# Find package directory
 PACKAGE_DIR=""
 for path in "vendor/juliojar4/auto-blocks" "../vendor/juliojar4/auto-blocks" "../../vendor/juliojar4/auto-blocks" "../../../vendor/juliojar4/auto-blocks"; do
     if [ -d "$path" ]; then
@@ -23,146 +23,146 @@ for path in "vendor/juliojar4/auto-blocks" "../vendor/juliojar4/auto-blocks" "..
 done
 
 if [ -z "$PACKAGE_DIR" ]; then
-    echo "❌ Pacote auto-blocks não encontrado no vendor!"
-    echo "Execute: composer require juliojar4/auto-blocks:dev-master"
+    echo "❌ Auto-blocks package not found in vendor!"
+    echo "Run: composer require juliojar4/auto-blocks:dev-master"
     exit 1
 fi
 
-echo "✅ Pacote encontrado em: $PACKAGE_DIR"
+echo "✅ Package found at: $PACKAGE_DIR"
 
-# Criar diretórios necessários
+# Create necessary directories
 echo ""
-echo "📁 Criando diretórios..."
+echo "📁 Creating directories..."
 mkdir -p resources/blocks
 mkdir -p resources/views/blocks
 mkdir -p public/build
 mkdir -p app/Blocks
 mkdir -p app/Console/Commands
 
-echo "✅ Diretórios criados!"
+echo "✅ Directories created!"
 
-# Copiar arquivos
+# Copy files
 echo ""
-echo "📄 Copiando arquivos..."
+echo "📄 Copying files..."
 
 if [ -f "$PACKAGE_DIR/stubs/BlockManager.php" ]; then
     cp "$PACKAGE_DIR/stubs/BlockManager.php" "app/Blocks/BlockManager.php"
-    echo "✅ BlockManager.php copiado"
+    echo "✅ BlockManager.php copied"
 else
-    echo "⚠️  BlockManager.php não encontrado"
+    echo "⚠️  BlockManager.php not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/MakeBlockCommand.php" ]; then
     cp "$PACKAGE_DIR/stubs/MakeBlockCommand.php" "app/Console/Commands/MakeBlockCommand.php"
-    echo "✅ MakeBlockCommand.php copiado"
+    echo "✅ MakeBlockCommand.php copied"
 else
-    echo "⚠️  MakeBlockCommand.php não encontrado"
+    echo "⚠️  MakeBlockCommand.php not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/SyncBlocksCommand.php" ]; then
     cp "$PACKAGE_DIR/stubs/SyncBlocksCommand.php" "app/Console/Commands/SyncBlocksCommand.php"
-    echo "✅ SyncBlocksCommand.php copiado"
+    echo "✅ SyncBlocksCommand.php copied"
 else
-    echo "⚠️  SyncBlocksCommand.php não encontrado"
+    echo "⚠️  SyncBlocksCommand.php not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/blocks.js" ]; then
     cp "$PACKAGE_DIR/stubs/blocks.js" "resources/js/blocks.js"
-    echo "✅ blocks.js copiado"
+    echo "✅ blocks.js copied"
 else
-    echo "⚠️  blocks.js não encontrado"
+    echo "⚠️  blocks.js not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/app.js" ]; then
     cp "$PACKAGE_DIR/stubs/app.js" "resources/js/app.js"
-    echo "✅ app.js copiado"
+    echo "✅ app.js copied"
 else
-    echo "⚠️  app.js não encontrado"
+    echo "⚠️  app.js not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/editor.js" ]; then
     cp "$PACKAGE_DIR/stubs/editor.js" "resources/js/editor.js"
-    echo "✅ editor.js copiado"
+    echo "✅ editor.js copied"
 else
-    echo "⚠️  editor.js não encontrado"
+    echo "⚠️  editor.js not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/blocks.css" ]; then
     cp "$PACKAGE_DIR/stubs/blocks.css" "resources/css/blocks.css"
-    echo "✅ blocks.css copiado"
+    echo "✅ blocks.css copied"
 else
-    echo "⚠️  blocks.css não encontrado"
+    echo "⚠️  blocks.css not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/vite.config.js" ]; then
     cp "$PACKAGE_DIR/stubs/vite.config.js" "vite.config.js"
-    echo "✅ vite.config.js copiado"
+    echo "✅ vite.config.js copied"
 else
-    echo "⚠️  vite.config.js não encontrado"
+    echo "⚠️  vite.config.js not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/blocks.php" ]; then
     cp "$PACKAGE_DIR/stubs/blocks.php" "resources/blocks.php"
-    echo "✅ blocks.php copiado"
+    echo "✅ blocks.php copied"
 else
-    echo "⚠️  blocks.php não encontrado"
+    echo "⚠️  blocks.php not found"
 fi
 
 if [ -f "$PACKAGE_DIR/stubs/setup.php" ]; then
     if [ -f "app/setup.php" ]; then
-        # Verificar se a integração já existe
+        # Check if integration already exists
         if grep -q "BlockManager" app/setup.php; then
-            echo "✅ BlockManager já integrado no setup.php"
+            echo "✅ BlockManager already integrated in setup.php"
         else
-            echo "➕ Adicionando integração do BlockManager ao setup.php"
+            echo "➕ Adding BlockManager integration to setup.php"
             cat "$PACKAGE_DIR/stubs/setup.php" >> "app/setup.php"
-            echo "✅ BlockManager integrado ao setup.php"
+            echo "✅ BlockManager integrated into setup.php"
         fi
     else
-        # Se não existe setup.php, criar com apenas a integração
+        # If setup.php doesn't exist, create with integration only
         cp "$PACKAGE_DIR/stubs/setup.php" "app/setup.php"
-        echo "✅ setup.php criado com integração do BlockManager"
+        echo "✅ setup.php created with BlockManager integration"
     fi
 else
-    echo "⚠️  setup.php não encontrado no pacote"
+    echo "⚠️  setup.php not found in package"
 fi
 
 if [ -f "$PACKAGE_DIR/sync-blocks.sh" ]; then
     cp "$PACKAGE_DIR/sync-blocks.sh" "sync-blocks.sh"
     chmod +x "sync-blocks.sh"
-    echo "✅ sync-blocks.sh copiado"
+    echo "✅ sync-blocks.sh copied"
 else
-    echo "⚠️  sync-blocks.sh não encontrado"
+    echo "⚠️  sync-blocks.sh not found"
 fi
 
 if [ -f "$PACKAGE_DIR/verify-system.sh" ]; then
     cp "$PACKAGE_DIR/verify-system.sh" "verify-system.sh"
     chmod +x "verify-system.sh"
-    echo "✅ verify-system.sh copiado"
+    echo "✅ verify-system.sh copied"
 else
-    echo "⚠️  verify-system.sh não encontrado"
+    echo "⚠️  verify-system.sh not found"
 fi
 
 echo ""
-echo "✅ Auto Blocks instalado com sucesso!"
+echo "✅ Auto Blocks installed successfully!"
 echo ""
-echo "📋 Próximos passos:"
+echo "📋 Next steps:"
 echo ""
-echo "🔧 Para ambientes com LANDO:"
+echo "🔧 For LANDO environments:"
 echo "  1. yarn install"
 echo "  2. yarn build"
-echo "  3. lando wp acorn make:block meu-primeiro-bloco --with-js --with-css"
-echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
+echo "  3. lando wp acorn make:block my-first-block --with-js --with-css"
+echo "  4. bash sync-blocks.sh  (if import wasn't added automatically)"
 echo "  5. yarn build"
-echo "  6. ✅ BlockManager integrado automaticamente no setup.php - blocos funcionarão!"
+echo "  6. ✅ BlockManager automatically integrated in setup.php - blocks will work!"
 echo ""
-echo "🔧 Para ambientes SEM LANDO:"
+echo "🔧 For environments WITHOUT LANDO:"
 echo "  1. yarn install"
 echo "  2. yarn build" 
-echo "  3. wp acorn make:block meu-primeiro-bloco --with-js --with-css"
-echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
+echo "  3. wp acorn make:block my-first-block --with-js --with-css"
+echo "  4. bash sync-blocks.sh  (if import wasn't added automatically)"
 echo "  5. yarn build"
-echo "  6. ✅ BlockManager integrado automaticamente no setup.php - blocos funcionarão!"
+echo "  6. ✅ BlockManager automatically integrated in setup.php - blocks will work!"
 echo ""
-echo "⚠️  IMPORTANTE: NUNCA use 'php artisan' - use sempre 'lando wp acorn' ou 'wp acorn'"
+echo "⚠️  IMPORTANT: NEVER use 'php artisan' - always use 'lando wp acorn' or 'wp acorn'"
 echo ""

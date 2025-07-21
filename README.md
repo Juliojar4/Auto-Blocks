@@ -1,182 +1,202 @@
-# 🎨 Auto Blocks - Sistema de Blocos Gutenberg para Sage/Acorn
+# 🎨 Auto Blocks - Gutenberg Block System for Sage/Acorn
 
-Sistema completo para criação de blocos Gutenberg customizados em temas WordPress usando Sage/Acorn + Laravel.
+Complete system for creating custom Gutenberg blocks in WordPress themes using Sage/Acorn + Laravel.
 
-## 📦 Instalação
+## 🚀 Installation
 
-### 1. Instalar via Composer
+### Prerequisites
+- WordPress 6.0+
+- Sage/Acorn theme
+- PHP 8.0+
+- Node.js and npm
+
+### 1. Install via Composer
 ```bash
+composer config repositories.auto-blocks vcs https://github.com/Juliojar4/Auto-Blocks.git
 composer require juliojar4/auto-blocks:dev-master
 ```
 
-### 2. Se a instalação automática não funcionar
+### 2. If automatic installation doesn't work
 
-Execute um dos scripts de instalação manual:
+Run the manual installation script:
 
-**Opção A - Script Bash (Recomendado):**
 ```bash
 bash vendor/juliojar4/auto-blocks/install-auto-blocks.sh
 ```
 
-**Opção B - Script PHP:**
+### 3. Environment-specific commands
+
+**🐳 With Lando (detects .lando.yml):**
 ```bash
-php vendor/juliojar4/auto-blocks/install-auto-blocks.php
+lando wp acorn make:block block-name
 ```
 
-**Opção C - Via Composer:**
+**💻 Direct WP-CLI:**
 ```bash
-composer run-script post-install-cmd
+wp acorn make:block block-name
 ```
 
-### 3. Para projetos com Lando
+**❌ NEVER USE:**
 ```bash
-# Se usar Lando, execute os comandos assim:
-lando wp acorn make:block nome-do-bloco --with-js --with-css
+php artisan make:block  # ← THIS DOESN'T WORK WITH WORDPRESS!
 ```
 
-### 4. Para projetos sem Lando
-```bash
-# Se usar WP-CLI diretamente:
-wp acorn make:block nome-do-bloco --with-js --with-css
+## 🚀 Quick Usage
 
-# Ou se tiver artisan configurado:
-php artisan make:block nome-do-bloco --with-js --with-css
+### Create a new block:
+```bash
+# With Lando
+lando wp acorn make:block my-block
+
+# Without Lando  
+wp acorn make:block my-block
 ```
 
-## 🚀 Uso Rápido
-
-### Criar um novo bloco:
-```bash
-# Com Lando
-lando wp acorn make:block meu-bloco --with-js --with-css
-
-# Sem Lando  
-wp acorn make:block meu-bloco --with-js --with-css
-```
-
-### Compilar assets:
+### Compile assets:
 ```bash
 npm run build
-# ou
+# or
 yarn build
 ```
 
-### Verificar blocos criados:
+### Verify created blocks:
 ```bash
-# Listar comandos disponíveis
-lando wp acorn list
-
-# Sincronizar blocos existentes
+# Sync existing blocks (Acorn command)
 lando wp acorn blocks:sync
+
+# Verify system installation
+bash verify-system.sh
 ```
 
-## 📁 Estrutura Criada
+## 📁 Created Structure
 
-Após a instalação, os seguintes arquivos e diretórios serão criados:
+After installation, the following files and directories will be created:
 
 ```
 📁 app/
   📁 Blocks/
-    📄 BlockManager.php           # Gerenciador de blocos
+    📄 BlockManager.php           # Block manager
   📁 Console/
     📁 Commands/
-      📄 MakeBlockCommand.php     # Comando para criar blocos
-      📄 SyncBlocksCommand.php    # Comando para sincronizar
+      📄 MakeBlockCommand.php     # Command to create blocks
+      📄 SyncBlocksCommand.php    # Command to synchronize
+  📄 setup.php                    # BlockManager integration (added)
 
 📁 resources/
-  📁 blocks/                      # Diretório para blocos customizados
+  📁 blocks/                      # Directory for custom blocks
   📁 views/
-    📁 blocks/                    # Templates Blade dos blocos
+    📁 blocks/                    # Blade templates for blocks
   📁 js/
-    📄 blocks.js                  # JavaScript principal dos blocos
+    📄 blocks.js                  # Main JavaScript for blocks
+    📄 app.js                     # Frontend JavaScript entry point
+    📄 editor.js                  # Editor JavaScript entry point
   📁 css/
-    📄 blocks.css                 # CSS dos blocos
-  📄 blocks.php                   # Configuração PHP dos blocos
+    📄 blocks.css                 # Block styles
+  📄 blocks.php                   # PHP block configuration
 
-📄 vite.config.js                 # Configuração do Vite (atualizada)
+📄 vite.config.js                 # Vite configuration (updated)
+📄 sync-blocks.sh                # Script to sync imports
+📄 verify-system.sh              # Script to verify installation
 ```
 
-## 🎯 Exemplo de Uso
+## 🎯 Usage Example
 
-### 1. Criar um bloco
+### 1. Create a block
 ```bash
-lando wp acorn make:block banner-promocional --with-js --with-css
+lando wp acorn make:block promotional-banner
 ```
 
-### 2. Compilar
+### 2. Compile
 ```bash
 yarn build
 ```
 
-### 3. Usar no WordPress
-- Acesse o editor de blocos
-- Procure por "Banner Promocional"
-- Adicione e configure!
+### 3. Use in WordPress
+- BlockManager will be automatically registered in WordPress
+- Go to the block editor
+- Search for "Promotional Banner"
+- Add and configure!
 
-## 🔧 Comandos Disponíveis
+## 🔧 Available Commands
 
 ```bash
-# Criar bloco simples
-lando wp acorn make:block nome-do-bloco
+# Create simple block
+lando wp acorn make:block block-name
 
-# Criar bloco com JavaScript e CSS
-lando wp acorn make:block nome-do-bloco --with-js --with-css
-
-# Sincronizar blocos existentes
+# Sync existing blocks (Acorn command)
 lando wp acorn blocks:sync
 
-# Listar todos os comandos
-lando wp acorn list
+# Sync imports in blocks.js (bash script)
+bash sync-blocks.sh
+
+# Verify complete installation
+bash verify-system.sh
 ```
 
-## ⚠️ Problemas Comuns e Soluções
+## ⚠️ Common Issues and Solutions
 
-### 1. Erro "Could not open input file: artisan"
-**Solução:** Use `lando wp acorn` em vez de `php artisan`
+### 1. Error "Could not open input file: artisan"
+**Solution:** Use `lando wp acorn` instead of `php artisan`
 
-### 2. Erro no vite.config.js com glob
-**Solução:** Já corrigido na versão atual. Se acontecer, reinstale.
+### 2. Error in vite.config.js with glob
+**Solution:** Already fixed in current version. If it happens, reinstall.
 
-### 3. Erro "Could not resolve entry module"
-**Solução:** Execute `yarn build` após criar blocos
+### 3. Error "Could not resolve entry module"
+**Solution:** Run `yarn build` after creating blocks
 
-### 4. Scripts de instalação não executaram
-**Solução:** Execute manualmente um dos scripts de instalação
+### 4. Installation scripts didn't run
+**Solution:** Manually run one of the installation scripts
 
-### 5. Comando make:block não encontrado
-**Solução:** Verifique se está no diretório do tema e se o Acorn está configurado
+### 5. Command make:block not found
+**Solution:** Check if you're in the theme directory and Acorn is configured
 
-## 📋 Requisitos
+### 6. Block created but doesn't appear in editor
+**Solution:** The import wasn't automatically added to blocks.js:
+```bash
+# Run the automatic synchronizer
+bash sync-blocks.sh
 
-- ✅ WordPress com tema Sage/Acorn
+# Then compile
+yarn build
+```
+
+### 7. Verify if everything is working correctly
+**Solution:** Run the complete verification script:
+```bash
+bash verify-system.sh
+```
+
+## 📋 Requirements
+
+- ✅ WordPress with Sage/Acorn theme
 - ✅ PHP 8.0+
-- ✅ Node.js e npm/yarn
+- ✅ Node.js and npm/yarn
 - ✅ Composer
-- ✅ WP-CLI (recomendado)
-- ✅ Lando (opcional, mas recomendado)
+- ✅ WP-CLI (recommended)
+- ✅ Lando (optional, but recommended)
 
-## 🆘 Suporte
+## 🆘 Support
 
-Se encontrar problemas:
+If you encounter issues:
 
-1. ✅ Verifique se está no diretório raiz do tema
-2. ✅ Confirme que o Sage/Acorn está configurado
-3. ✅ Execute os scripts de instalação manual
-4. ✅ Verifique se todos os arquivos foram criados
-5. ✅ Execute `yarn build` após mudanças
+1. ✅ Check if you're in the theme root directory
+2. ✅ Confirm that Sage/Acorn is configured
+3. ✅ Run the manual installation scripts
+4. ✅ Verify that all files were created
+5. ✅ Run `yarn build` after changes
 
-## 🎉 Resultado
+## 🎉 Result
 
-Após a instalação bem-sucedida, você terá:
+After successful installation, you will have:
 
-- ✅ Sistema completo de criação de blocos
-- ✅ Templates automatizados
-- ✅ Compilação automática de assets
-- ✅ Integração perfeita com Gutenberg
-- ✅ Suporte a Tailwind CSS
-- ✅ Hot reload durante desenvolvimento
+- ✅ Complete block creation system
+- ✅ Automated templates
+- ✅ Automatic asset compilation
+- ✅ Perfect Gutenberg integration
+- ✅ Tailwind CSS support
+- ✅ Hot reload during development
 
 ---
 
-**Desenvolvido por Julio Jara**  
+**Developed by Julio Jara**  
 🔗 [GitHub](https://github.com/Juliojar4/Auto-Blocks)

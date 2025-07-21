@@ -5,32 +5,32 @@ import { wordpressPlugin, wordpressThemeJson } from '@roots/vite-plugin';
 import fs from 'fs';
 import path from 'path';
 
-// Descobrir automaticamente assets dos blocos
+// Automatically discover block assets
 function discoverBlockAssets() {
   const blockAssets = [];
   const blocksDir = 'resources/blocks';
   
-  // Verificar se o diretório existe
+  // Check if directory exists
   if (!fs.existsSync(blocksDir)) {
     return blockAssets;
   }
   
-  // Ler todos os diretórios de blocos
+  // Read all block directories
   const blockDirs = fs.readdirSync(blocksDir, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name);
   
-  // Para cada diretório de bloco, procurar por assets
+  // For each block directory, look for assets
   blockDirs.forEach(blockDir => {
     const blockPath = path.join(blocksDir, blockDir);
     
-    // Verificar se existe block.js
+    // Check if block.js exists
     const jsFile = path.join(blockPath, 'block.js');
     if (fs.existsSync(jsFile)) {
       blockAssets.push(jsFile);
     }
     
-    // Verificar se existe block.css
+    // Check if block.css exists
     const cssFile = path.join(blockPath, 'block.css');
     if (fs.existsSync(cssFile)) {
       blockAssets.push(cssFile);
@@ -53,7 +53,7 @@ export default defineConfig({
         'resources/js/editor.js',
         'resources/js/blocks.js',
         'resources/css/blocks.css',
-        // Assets dos blocos descobertos automaticamente
+        // Block assets discovered automatically
         ...discoverBlockAssets(),
       ],
       refresh: true,

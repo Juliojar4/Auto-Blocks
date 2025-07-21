@@ -1,26 +1,26 @@
 #!/bin/bash
 
-echo "🔄 Auto Blocks - Sincronizador de Blocos"
-echo "========================================"
+echo "🔄 Auto Blocks - Block Synchronizer"
+echo "===================================="
 echo ""
 
-# Verificar se estamos no diretório correto
+# Check if we're in the correct directory
 if [ ! -f "resources/js/blocks.js" ]; then
-    echo "❌ Arquivo blocks.js não encontrado!"
-    echo "Execute este script no diretório raiz do tema."
+    echo "❌ blocks.js file not found!"
+    echo "Run this script in the theme root directory."
     exit 1
 fi
 
-echo "✅ Procurando blocos criados..."
+echo "✅ Looking for created blocks..."
 
-# Encontrar todos os arquivos block.jsx
+# Find all block.jsx files
 BLOCKS_FOUND=0
 BLOCKS_ADDED=0
 
-# Ler o conteúdo atual do blocks.js
+# Read current blocks.js content
 BLOCKS_JS_CONTENT=$(cat resources/js/blocks.js)
 
-# Procurar por arquivos block.jsx
+# Look for block.jsx files
 if [ -d "resources/blocks" ]; then
     for BLOCK_DIR in resources/blocks/*; do
         if [ -d "$BLOCK_DIR" ] && [ -f "$BLOCK_DIR/block.jsx" ]; then
@@ -28,19 +28,19 @@ if [ -d "resources/blocks" ]; then
             BLOCK_NAME=$(basename "$BLOCK_DIR")
             IMPORT_LINE="import '../blocks/$BLOCK_NAME/block.jsx';"
             
-            echo "📦 Encontrado bloco: $BLOCK_NAME"
+            echo "📦 Block found: $BLOCK_NAME"
             
-            # Verificar se o import já existe
+            # Check if import already exists
             if ! grep -q "$IMPORT_LINE" resources/js/blocks.js; then
-                echo "➕ Adicionando import para $BLOCK_NAME"
+                echo "➕ Adding import for $BLOCK_NAME"
                 
-                # Adicionar após o marcador AUTO-IMPORTS ou antes do console.log
+                # Add after AUTO-IMPORTS marker or before console.log
                 if grep -q "AUTO-IMPORTS:" resources/js/blocks.js; then
                     sed -i "/AUTO-IMPORTS:/ a\\$IMPORT_LINE" resources/js/blocks.js
                 else
-                    # Criar arquivo temporário com o novo import
+                    # Create temporary file with new import
                     awk -v import="$IMPORT_LINE" '
-                    /console\.log.*Auto Blocks.*Sistema carregado/ {
+                    /console\.log.*Auto Blocks.*System loaded/ {
                         print import "\n"
                         print
                         next
@@ -52,27 +52,27 @@ if [ -d "resources/blocks" ]; then
                 
                 BLOCKS_ADDED=$((BLOCKS_ADDED + 1))
             else
-                echo "✅ Import já existe para $BLOCK_NAME"
+                echo "✅ Import already exists for $BLOCK_NAME"
             fi
         fi
     done
 else
-    echo "⚠️  Diretório resources/blocks não encontrado"
+    echo "⚠️  resources/blocks directory not found"
 fi
 
 echo ""
-echo "📊 Resultado:"
-echo "   Blocos encontrados: $BLOCKS_FOUND"
-echo "   Imports adicionados: $BLOCKS_ADDED"
+echo "📊 Results:"
+echo "   Blocks found: $BLOCKS_FOUND"
+echo "   Imports added: $BLOCKS_ADDED"
 
 if [ $BLOCKS_ADDED -gt 0 ]; then
     echo ""
-    echo "🔧 Próximos passos:"
+    echo "🔧 Next steps:"
     echo "   1. yarn build"
-    echo "   2. Verificar blocos no editor WordPress"
+    echo "   2. Check blocks in WordPress editor"
 else
     echo ""
-    echo "✅ Todos os blocos já estão sincronizados!"
+    echo "✅ All blocks are already synchronized!"
 fi
 
 echo ""

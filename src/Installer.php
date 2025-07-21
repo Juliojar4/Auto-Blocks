@@ -6,69 +6,69 @@ use Composer\Script\Event;
 use Composer\IO\IOInterface;
 
 /**
- * Instalador Automático do Sistema Auto Blocks
+ * Auto Blocks System Automatic Installer
  * 
- * Copia automaticamente todos os arquivos necessários para o tema Sage/Acorn
+ * Automatically copies all necessary files to the Sage/Acorn theme
  */
 class Installer
 {
     /**
-     * Executar após instalação
+     * Execute after installation
      */
     public static function install(Event $event): void
     {
         $io = $event->getIO();
         $composer = $event->getComposer();
         
-        $io->write('<info>🎨 Instalando Auto Blocks - Sistema de Blocos Gutenberg...</info>');
+        $io->write('<info>🎨 Installing Auto Blocks - Gutenberg Blocks System...</info>');
         
-        // Detectar diretório do tema
+        // Detect theme directory
         $themeDir = self::detectThemeDirectory();
         
         if (!$themeDir) {
-            $io->writeError('<error>❌ Diretório do tema não encontrado. Execute dentro de um tema Sage/Acorn.</error>');
-            $io->writeError('<error>   Certifique-se de estar no diretório raiz do tema (onde está o functions.php).</error>');
+            $io->writeError('<error>❌ Theme directory not found. Run inside a Sage/Acorn theme.</error>');
+            $io->writeError('<error>   Make sure you are in the theme root directory (where functions.php is located).</error>');
             return;
         }
         
-        $io->write("<info>✅ Tema detectado: {$themeDir}</info>");
+        $io->write("<info>✅ Theme detected: {$themeDir}</info>");
         
         $packageDir = self::getPackageDirectory($composer);
         
-        // Copiar arquivos
+        // Copy files
         self::copyFiles($packageDir, $themeDir, $io);
         
-        // Criar diretórios
+        // Create directories
         self::createDirectories($themeDir, $io);
         
-        // Atualizar arquivos do tema
+        // Update theme files
         self::updateThemeFiles($themeDir, $io);
         
         $io->write('');
         $io->write('<info>✅ Auto Blocks instalado com sucesso!</info>');
         $io->write('');
-        $io->write('<comment>📋 Próximos passos:</comment>');
+        $io->write('<comment>📋 Next steps:</comment>');
         $io->write('<comment>  1. npm install</comment>');
         $io->write('<comment>  2. npm run build</comment>');
-        $io->write('<comment>  3. php artisan make:block meu-primeiro-bloco --with-js --with-css</comment>');
+        $io->write('<comment>  3. php artisan make:block my-first-block --with-js --with-css</comment>');
         $io->write('<comment>  4. npm run build</comment>');
-        $io->write('<comment>  5. Verificar no editor WordPress</comment>');
+        $io->write('<comment>  5. Check in WordPress editor</comment>');
         $io->write('');
     }
     
     /**
-     * Executar após atualização
+     * Execute after update
      */
     public static function update(Event $event): void
     {
         $io = $event->getIO();
-        $io->write('<info>🔄 Atualizando Auto Blocks...</info>');
+        $io->write('<info>🔄 Updating Auto Blocks...</info>');
         
         self::install($event);
     }
     
     /**
-     * Detectar diretório do tema
+     * Detect theme directory
      */
     protected static function detectThemeDirectory(): ?string
     {
@@ -88,7 +88,7 @@ class Installer
     }
     
     /**
-     * Verificar se é um diretório de tema válido
+     * Check if it's a valid theme directory
      */
     protected static function isThemeDirectory(string $path): bool
     {
@@ -98,7 +98,7 @@ class Installer
     }
     
     /**
-     * Obter diretório do pacote
+     * Get package directory
      */
     protected static function getPackageDirectory($composer): string
     {
@@ -107,7 +107,7 @@ class Installer
     }
     
     /**
-     * Copiar arquivos necessários
+     * Copy necessary files
      */
     protected static function copyFiles(string $packageDir, string $themeDir, IOInterface $io): void
     {
@@ -124,7 +124,7 @@ class Installer
             $sourcePath = $packageDir . '/' . $source;
             $destPath = $themeDir . '/' . $destination;
             
-            // Criar diretório se não existir
+            // Create directory if it doesn't exist
             $destDir = dirname($destPath);
             if (!is_dir($destDir)) {
                 mkdir($destDir, 0755, true);
@@ -133,21 +133,21 @@ class Installer
             if (file_exists($sourcePath)) {
                 if (!file_exists($destPath) || self::shouldOverwrite($sourcePath, $destPath)) {
                     if (copy($sourcePath, $destPath)) {
-                        $io->write("  ✅ Copiado: {$destination}");
+                        $io->write("  ✅ Copied: {$destination}");
                     } else {
-                        $io->writeError("  ❌ Erro ao copiar: {$destination}");
+                        $io->writeError("  ❌ Error copying: {$destination}");
                     }
                 } else {
-                    $io->write("  ⏭️ Pulado (já existe e é mais recente): {$destination}");
+                    $io->write("  ⏭️ Skipped (already exists and is newer): {$destination}");
                 }
             } else {
-                $io->writeError("  ❌ Arquivo fonte não encontrado: {$source}");
+                $io->writeError("  ❌ Source file not found: {$source}");
             }
         }
     }
     
     /**
-     * Verificar se deve sobrescrever arquivo
+     * Check if file should be overwritten
      */
     protected static function shouldOverwrite(string $sourcePath, string $destPath): bool
     {
@@ -155,12 +155,12 @@ class Installer
             return true;
         }
         
-        // Sobrescrever se o arquivo fonte for mais recente
+        // Overwrite if source file is newer
         return filemtime($sourcePath) > filemtime($destPath);
     }
     
     /**
-     * Criar diretórios necessários
+     * Create necessary directories
      */
     protected static function createDirectories(string $themeDir, IOInterface $io): void
     {
@@ -176,39 +176,39 @@ class Installer
             $fullPath = $themeDir . '/' . $dir;
             if (!is_dir($fullPath)) {
                 if (mkdir($fullPath, 0755, true)) {
-                    $io->write("  📁 Criado diretório: {$dir}");
+                    $io->write("  📁 Created directory: {$dir}");
                 }
             }
         }
     }
     
     /**
-     * Atualizar arquivos do tema
+     * Update theme files
      */
     protected static function updateThemeFiles(string $themeDir, IOInterface $io): void
     {
-        // Atualizar functions.php
+        // Update functions.php
         self::updateFunctionsPhp($themeDir, $io);
         
-        // Atualizar ThemeServiceProvider.php
+        // Update ThemeServiceProvider.php
         self::updateThemeServiceProvider($themeDir, $io);
     }
     
     /**
-     * Atualizar functions.php
+     * Update functions.php
      */
     protected static function updateFunctionsPhp(string $themeDir, IOInterface $io): void
     {
         $functionsPath = $themeDir . '/functions.php';
         
         if (!file_exists($functionsPath)) {
-            $io->writeError("  ❌ functions.php não encontrado");
+            $io->writeError("  ❌ functions.php not found");
             return;
         }
         
         $content = file_get_contents($functionsPath);
         
-        // Verificar se já tem 'blocks' no collect
+        // Check if 'blocks' is already in collect
         if (strpos($content, "'blocks'") === false) {
             $patterns = [
                 "collect(['setup', 'filters'])",
@@ -227,25 +227,25 @@ class Installer
             
             if ($content !== $originalContent) {
                 if (file_put_contents($functionsPath, $content)) {
-                    $io->write("  ✅ Atualizado: functions.php (adicionado 'blocks')");
+                    $io->write("  ✅ Updated: functions.php (added 'blocks')");
                 } else {
-                    $io->writeError("  ❌ Erro ao atualizar functions.php");
+                    $io->writeError("  ❌ Error updating functions.php");
                 }
             }
         } else {
-            $io->write("  ⏭️ functions.php já configurado");
+            $io->write("  ⏭️ functions.php already configured");
         }
     }
     
     /**
-     * Atualizar ThemeServiceProvider.php
+     * Update ThemeServiceProvider.php
      */
     protected static function updateThemeServiceProvider(string $themeDir, IOInterface $io): void
     {
         $providerPath = $themeDir . '/app/Providers/ThemeServiceProvider.php';
         
         if (!file_exists($providerPath)) {
-            $io->write("  ⚠️ ThemeServiceProvider.php não encontrado (normal em alguns temas)");
+            $io->write("  ⚠️ ThemeServiceProvider.php not found (normal in some themes)");
             return;
         }
         
@@ -282,17 +282,17 @@ class Installer
     {
         parent::register();
         
-        // Registrar o gerenciador de blocos no container
+        // Register the block manager in the container
         $this->app->singleton(BlockManager::class);';
                 
             $content = str_replace($registerMethod, $newRegisterMethod, $content);
             $updated = true;
         }
         
-        // Adicionar comandos
+        // Add commands
         if (strpos($content, 'MakeBlockCommand::class') === false) {
             $commandsSection = '
-        // Registrar comandos personalizados
+        // Register custom commands
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MakeBlockCommand::class,
@@ -310,12 +310,12 @@ class Installer
         
         if ($updated && $content !== $originalContent) {
             if (file_put_contents($providerPath, $content)) {
-                $io->write("  ✅ Atualizado: ThemeServiceProvider.php");
+                $io->write("  ✅ Updated: ThemeServiceProvider.php");
             } else {
-                $io->writeError("  ❌ Erro ao atualizar ThemeServiceProvider.php");
+                $io->writeError("  ❌ Error updating ThemeServiceProvider.php");
             }
         } else {
-            $io->write("  ⏭️ ThemeServiceProvider.php já configurado");
+            $io->write("  ⏭️ ThemeServiceProvider.php already configured");
         }
     }
 }

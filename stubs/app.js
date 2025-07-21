@@ -1,13 +1,13 @@
 /**
- * Arquivo principal da aplicação
- * Este arquivo é carregado no frontend do site
+ * Main application file
+ * This file is loaded on the website frontend
  */
 
-// Importar estilos CSS principais
+// Import main CSS styles
 import '../css/app.css';
 
-// Importar JavaScript dos blocos para o frontend
+// Import block JavaScript for frontend
 import './blocks';
 
-// Seu código JavaScript customizado aqui
-console.log('🎨 App carregado - Frontend');
+// Your custom JavaScript code here
+console.log('🎨 App loaded - Frontend');

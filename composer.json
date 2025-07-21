@@ -1,6 +1,6 @@
 {
     "name": "juliojar4/auto-blocks",
-    "description": "Sistema completo de blocos Gutenberg customizados para WordPress com Sage/Acorn - Instalação automática via Composer",
+    "description": "Complete system for custom Gutenberg blocks for WordPress with Sage/Acorn - Automatic installation via Composer",
     "type": "wordpress-package",
     "license": "MIT",
     "keywords": ["wordpress", "gutenberg", "blocks", "sage", "acorn", "laravel", "blade"],

@@ -1,13 +1,13 @@
 /**
- * Arquivo para o editor do WordPress (admin)
- * Este arquivo é carregado no editor de blocos (Gutenberg)
+ * WordPress editor file (admin)
+ * This file is loaded in the block editor (Gutenberg)
  */
 
-// Importar estilos CSS do editor
+// Import editor CSS styles
 import '../css/editor.css';
 
-// Importar JavaScript dos blocos para o editor
+// Import block JavaScript for editor
 import './blocks';
 
-// Seu código JavaScript customizado para o editor aqui
-console.log('🎨 Editor carregado - Admin');
+// Your custom JavaScript code for editor here
+console.log('🎨 Editor loaded - Admin');
