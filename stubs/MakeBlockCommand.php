@@ -250,28 +250,22 @@ class MakeBlockCommand extends Command
             return;
         }
         
-        // Encontrar a seção de imports dos blocos
-        $pattern = '/(\/\/ Importar blocos automaticamente\s*\n)(.*?)(\/\/ Adicionar estilos globais)/s';
-        
-        if (preg_match($pattern, $content, $matches)) {
-            $beforeImports = $matches[1];
-            $imports = $matches[2];
-            $afterImports = $matches[3];
-            
-            // Adicionar o novo import no final da lista
-            $newImports = $imports . $importLine . "\n";
-            
-            $newContent = str_replace(
-                $matches[0],
-                $beforeImports . $newImports . $afterImports,
+        // Método simples: adicionar antes do console.log
+        if (strpos($content, $importLine) === false) {
+            // Adicionar o import antes do console.log
+            $content = str_replace(
+                "console.log('🎨 Auto Blocks - Sistema carregado!');",
+                $importLine . "\n\nconsole.log('🎨 Auto Blocks - Sistema carregado!');",
                 $content
             );
             
-            $this->files->put($blocksJsPath, $newContent);
+            $this->files->put($blocksJsPath, $content);
             $this->line("✅ Atualizado: blocks.js");
         } else {
-            $this->error("❌ Não foi possível atualizar blocks.js - padrão não encontrado");
+            $this->line("✅ Import já existe no blocks.js");
         }
+            $this->error("❌ Não foi possível atualizar blocks.js - padrão não encontrado");
+        }        }
     }
 
     /**

@@ -94,6 +94,14 @@ else
     echo "⚠️  blocks.php não encontrado"
 fi
 
+if [ -f "$PACKAGE_DIR/sync-blocks.sh" ]; then
+    cp "$PACKAGE_DIR/sync-blocks.sh" "sync-blocks.sh"
+    chmod +x "sync-blocks.sh"
+    echo "✅ sync-blocks.sh copiado"
+else
+    echo "⚠️  sync-blocks.sh não encontrado"
+fi
+
 echo ""
 echo "✅ Auto Blocks instalado com sucesso!"
 echo ""
@@ -103,15 +111,17 @@ echo "🔧 Para ambientes com LANDO:"
 echo "  1. yarn install"
 echo "  2. yarn build"
 echo "  3. lando wp acorn make:block meu-primeiro-bloco --with-js --with-css"
-echo "  4. yarn build"
-echo "  5. Verificar no editor WordPress"
+echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
+echo "  5. yarn build"
+echo "  6. Verificar no editor WordPress"
 echo ""
 echo "🔧 Para ambientes SEM LANDO:"
 echo "  1. yarn install"
 echo "  2. yarn build" 
 echo "  3. wp acorn make:block meu-primeiro-bloco --with-js --with-css"
-echo "  4. yarn build"
-echo "  5. Verificar no editor WordPress"
+echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
+echo "  5. yarn build"
+echo "  6. Verificar no editor WordPress"
 echo ""
 echo "⚠️  IMPORTANTE: NUNCA use 'php artisan' - use sempre 'lando wp acorn' ou 'wp acorn'"
 echo ""

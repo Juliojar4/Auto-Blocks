@@ -154,6 +154,16 @@ lando wp acorn list
 - **Sem Lando:** `wp acorn make:block nome` 
 - **Nunca use:** `php artisan` (não funciona em WordPress)
 
+### 7. Bloco criado mas não aparece no editor
+**Solução:** O import não foi adicionado automaticamente ao blocks.js:
+```bash
+# Executar o sincronizador automático
+bash sync-blocks.sh
+
+# Depois compilar
+yarn build
+```
+
 ## 📋 Requisitos
 
 - ✅ WordPress com tema Sage/Acorn
