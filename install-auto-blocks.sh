@@ -108,6 +108,17 @@ else
     echo "⚠️  blocks.php não encontrado"
 fi
 
+if [ -f "$PACKAGE_DIR/stubs/setup.php" ]; then
+    if [ -f "app/setup.php" ]; then
+        echo "⚠️  setup.php já existe - backing up as setup.php.backup"
+        cp "app/setup.php" "app/setup.php.backup"
+    fi
+    cp "$PACKAGE_DIR/stubs/setup.php" "app/setup.php"
+    echo "✅ setup.php copiado (com integração do BlockManager)"
+else
+    echo "⚠️  setup.php não encontrado"
+fi
+
 if [ -f "$PACKAGE_DIR/sync-blocks.sh" ]; then
     cp "$PACKAGE_DIR/sync-blocks.sh" "sync-blocks.sh"
     chmod +x "sync-blocks.sh"
@@ -135,7 +146,7 @@ echo "  2. yarn build"
 echo "  3. lando wp acorn make:block meu-primeiro-bloco --with-js --with-css"
 echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
 echo "  5. yarn build"
-echo "  6. Verificar no editor WordPress"
+echo "  6. ✅ BlockManager está configurado no setup.php - blocos aparecerão automaticamente!"
 echo ""
 echo "🔧 Para ambientes SEM LANDO:"
 echo "  1. yarn install"
@@ -143,7 +154,7 @@ echo "  2. yarn build"
 echo "  3. wp acorn make:block meu-primeiro-bloco --with-js --with-css"
 echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
 echo "  5. yarn build"
-echo "  6. Verificar no editor WordPress"
+echo "  6. ✅ BlockManager está configurado no setup.php - blocos aparecerão automaticamente!"
 echo ""
 echo "⚠️  IMPORTANTE: NUNCA use 'php artisan' - use sempre 'lando wp acorn' ou 'wp acorn'"
 echo ""

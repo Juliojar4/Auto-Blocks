@@ -20,6 +20,7 @@ files=(
     "app/Blocks/BlockManager.php"
     "app/Console/Commands/MakeBlockCommand.php"
     "app/Console/Commands/SyncBlocksCommand.php"
+    "app/setup.php"
     "resources/js/blocks.js"
     "resources/js/app.js"
     "resources/js/editor.js"
@@ -96,6 +97,31 @@ if [ -f "resources/js/editor.js" ]; then
     fi
 else
     echo "❌ Arquivo editor.js não encontrado"
+fi
+
+# Verificar se o BlockManager está registrado no setup.php
+echo ""
+echo "🔍 Verificando integração do BlockManager no setup.php:"
+if [ -f "app/setup.php" ]; then
+    if grep -q "use App\\\\Blocks\\\\BlockManager" app/setup.php; then
+        echo "✅ Import do BlockManager presente"
+    else
+        echo "❌ Import do BlockManager ausente"
+    fi
+    
+    if grep -q "BlockManager()" app/setup.php; then
+        echo "✅ Instância do BlockManager presente"
+    else
+        echo "❌ Instância do BlockManager ausente"
+    fi
+    
+    if grep -q "register()" app/setup.php; then
+        echo "✅ Chamada register() presente"
+    else
+        echo "❌ Chamada register() ausente"
+    fi
+else
+    echo "❌ Arquivo setup.php não encontrado"
 fi
 
 # Verificar se existem blocos criados

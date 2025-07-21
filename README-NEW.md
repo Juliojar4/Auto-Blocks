@@ -84,6 +84,7 @@ Após a instalação, os seguintes arquivos e diretórios serão criados:
     📁 Commands/
       📄 MakeBlockCommand.php     # Comando para criar blocos
       📄 SyncBlocksCommand.php    # Comando para sincronizar
+  📄 setup.php                    # Configuração do tema (com BlockManager)
 
 📁 resources/
   📁 blocks/                      # Diretório para blocos customizados
@@ -113,6 +114,7 @@ yarn build
 ```
 
 ### 3. Usar no WordPress
+- O BlockManager será automaticamente registrado no WordPress
 - Acesse o editor de blocos
 - Procure por "Banner Promocional"
 - Adicione e configure!
