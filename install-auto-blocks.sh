@@ -110,13 +110,21 @@ fi
 
 if [ -f "$PACKAGE_DIR/stubs/setup.php" ]; then
     if [ -f "app/setup.php" ]; then
-        echo "⚠️  setup.php já existe - backing up as setup.php.backup"
-        cp "app/setup.php" "app/setup.php.backup"
+        # Verificar se a integração já existe
+        if grep -q "BlockManager" app/setup.php; then
+            echo "✅ BlockManager já integrado no setup.php"
+        else
+            echo "➕ Adicionando integração do BlockManager ao setup.php"
+            cat "$PACKAGE_DIR/stubs/setup.php" >> "app/setup.php"
+            echo "✅ BlockManager integrado ao setup.php"
+        fi
+    else
+        # Se não existe setup.php, criar com apenas a integração
+        cp "$PACKAGE_DIR/stubs/setup.php" "app/setup.php"
+        echo "✅ setup.php criado com integração do BlockManager"
     fi
-    cp "$PACKAGE_DIR/stubs/setup.php" "app/setup.php"
-    echo "✅ setup.php copiado (com integração do BlockManager)"
 else
-    echo "⚠️  setup.php não encontrado"
+    echo "⚠️  setup.php não encontrado no pacote"
 fi
 
 if [ -f "$PACKAGE_DIR/sync-blocks.sh" ]; then
@@ -146,7 +154,7 @@ echo "  2. yarn build"
 echo "  3. lando wp acorn make:block meu-primeiro-bloco --with-js --with-css"
 echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
 echo "  5. yarn build"
-echo "  6. ✅ BlockManager está configurado no setup.php - blocos aparecerão automaticamente!"
+echo "  6. ✅ BlockManager integrado automaticamente no setup.php - blocos funcionarão!"
 echo ""
 echo "🔧 Para ambientes SEM LANDO:"
 echo "  1. yarn install"
@@ -154,7 +162,7 @@ echo "  2. yarn build"
 echo "  3. wp acorn make:block meu-primeiro-bloco --with-js --with-css"
 echo "  4. bash sync-blocks.sh  (se o import não foi adicionado automaticamente)"
 echo "  5. yarn build"
-echo "  6. ✅ BlockManager está configurado no setup.php - blocos aparecerão automaticamente!"
+echo "  6. ✅ BlockManager integrado automaticamente no setup.php - blocos funcionarão!"
 echo ""
 echo "⚠️  IMPORTANTE: NUNCA use 'php artisan' - use sempre 'lando wp acorn' ou 'wp acorn'"
 echo ""
