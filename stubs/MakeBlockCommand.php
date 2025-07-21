@@ -264,8 +264,6 @@ class MakeBlockCommand extends Command
         } else {
             $this->line("✅ Import já existe no blocks.js");
         }
-            $this->error("❌ Não foi possível atualizar blocks.js - padrão não encontrado");
-        }        }
     }
 
     /**
