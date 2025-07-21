@@ -239,6 +239,12 @@ class MakeBlockCommand extends Command
     protected function updateBlocksJs(string $slug): void
     {
         $blocksJsPath = resource_path('js/blocks.js');
+        
+        if (!$this->files->exists($blocksJsPath)) {
+            $this->error("❌ Arquivo blocks.js não encontrado em: {$blocksJsPath}");
+            return;
+        }
+        
         $content = $this->files->get($blocksJsPath);
         
         // Linha de import para adicionar
@@ -250,19 +256,37 @@ class MakeBlockCommand extends Command
             return;
         }
         
-        // Método simples: adicionar antes do console.log
-        if (strpos($content, $importLine) === false) {
-            // Adicionar o import antes do console.log
+        $updated = false;
+        
+        // Método 1: Adicionar após o marcador AUTO-IMPORTS
+        if (strpos($content, '// AUTO-IMPORTS: Os blocos criados são importados automaticamente abaixo desta linha') !== false) {
             $content = str_replace(
-                "console.log('🎨 Auto Blocks - Sistema carregado!');",
-                $importLine . "\n\nconsole.log('🎨 Auto Blocks - Sistema carregado!');",
+                "// AUTO-IMPORTS: Os blocos criados são importados automaticamente abaixo desta linha",
+                "// AUTO-IMPORTS: Os blocos criados são importados automaticamente abaixo desta linha\n{$importLine}",
                 $content
             );
-            
+            $updated = true;
+        } 
+        // Método 2: Fallback - adicionar antes do console.log
+        elseif (strpos($content, "console.log('🎨 Auto Blocks - Sistema carregado!');") !== false) {
+            $content = str_replace(
+                "console.log('🎨 Auto Blocks - Sistema carregado!');",
+                "{$importLine}\n\nconsole.log('🎨 Auto Blocks - Sistema carregado!');",
+                $content
+            );
+            $updated = true;
+        }
+        // Método 3: Se não encontrou nenhum padrão, adicionar no final
+        else {
+            $content .= "\n{$importLine}\n";
+            $updated = true;
+        }
+        
+        if ($updated) {
             $this->files->put($blocksJsPath, $content);
-            $this->line("✅ Atualizado: blocks.js");
+            $this->line("✅ Atualizado: resources/js/blocks.js com import do bloco '{$slug}'");
         } else {
-            $this->line("✅ Import já existe no blocks.js");
+            $this->error("❌ Não foi possível atualizar o blocks.js");
         }
     }
 

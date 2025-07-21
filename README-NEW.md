@@ -65,11 +65,11 @@ yarn build
 
 ### Verificar blocos criados:
 ```bash
-# Listar comandos disponíveis
-lando wp acorn list
-
 # Sincronizar blocos existentes
 lando wp acorn blocks:sync
+
+# Verificar se tudo está funcionando
+bash verify-system.sh
 ```
 
 ## 📁 Estrutura Criada
@@ -96,6 +96,8 @@ Após a instalação, os seguintes arquivos e diretórios serão criados:
   📄 blocks.php                   # Configuração PHP dos blocos
 
 📄 vite.config.js                 # Configuração do Vite (atualizada)
+📄 sync-blocks.sh                # Script para sincronizar imports
+📄 verify-system.sh              # Script para verificar instalação
 ```
 
 ## 🎯 Exemplo de Uso
@@ -124,11 +126,14 @@ lando wp acorn make:block nome-do-bloco
 # Criar bloco com JavaScript e CSS
 lando wp acorn make:block nome-do-bloco --with-js --with-css
 
-# Sincronizar blocos existentes
+# Sincronizar blocos existentes (comando do Acorn)
 lando wp acorn blocks:sync
 
-# Listar todos os comandos
-lando wp acorn list
+# Sincronizar imports no blocks.js (script bash)
+bash sync-blocks.sh
+
+# Verificar instalação completa
+bash verify-system.sh
 ```
 
 ## ⚠️ Problemas Comuns e Soluções
@@ -162,6 +167,12 @@ bash sync-blocks.sh
 
 # Depois compilar
 yarn build
+```
+
+### 8. Verificar se tudo está funcionando corretamente
+**Solução:** Execute o script de verificação completa:
+```bash
+bash verify-system.sh
 ```
 
 ## 📋 Requisitos

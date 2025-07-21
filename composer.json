@@ -28,6 +28,8 @@
                 "stubs/MakeBlockCommand.php", 
                 "stubs/SyncBlocksCommand.php",
                 "stubs/blocks.js",
+                "stubs/app.js",
+                "stubs/editor.js",
                 "stubs/blocks.css",
                 "stubs/vite.config.js",
                 "stubs/blocks.php"

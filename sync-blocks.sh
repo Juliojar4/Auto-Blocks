@@ -34,18 +34,21 @@ if [ -d "resources/blocks" ]; then
             if ! grep -q "$IMPORT_LINE" resources/js/blocks.js; then
                 echo "➕ Adicionando import para $BLOCK_NAME"
                 
-                # Criar arquivo temporário com o novo import
-                awk -v import="$IMPORT_LINE" '
-                /console\.log.*Auto Blocks.*Sistema carregado/ {
-                    print import "\n"
-                    print
-                    next
-                }
-                { print }
-                ' resources/js/blocks.js > resources/js/blocks.js.tmp
-                
-                # Substituir o arquivo original
-                mv resources/js/blocks.js.tmp resources/js/blocks.js
+                # Adicionar após o marcador AUTO-IMPORTS ou antes do console.log
+                if grep -q "AUTO-IMPORTS:" resources/js/blocks.js; then
+                    sed -i "/AUTO-IMPORTS:/ a\\$IMPORT_LINE" resources/js/blocks.js
+                else
+                    # Criar arquivo temporário com o novo import
+                    awk -v import="$IMPORT_LINE" '
+                    /console\.log.*Auto Blocks.*Sistema carregado/ {
+                        print import "\n"
+                        print
+                        next
+                    }
+                    { print }
+                    ' resources/js/blocks.js > resources/js/blocks.js.tmp
+                    mv resources/js/blocks.js.tmp resources/js/blocks.js
+                fi
                 
                 BLOCKS_ADDED=$((BLOCKS_ADDED + 1))
             else

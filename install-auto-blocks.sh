@@ -73,6 +73,20 @@ else
     echo "⚠️  blocks.js não encontrado"
 fi
 
+if [ -f "$PACKAGE_DIR/stubs/app.js" ]; then
+    cp "$PACKAGE_DIR/stubs/app.js" "resources/js/app.js"
+    echo "✅ app.js copiado"
+else
+    echo "⚠️  app.js não encontrado"
+fi
+
+if [ -f "$PACKAGE_DIR/stubs/editor.js" ]; then
+    cp "$PACKAGE_DIR/stubs/editor.js" "resources/js/editor.js"
+    echo "✅ editor.js copiado"
+else
+    echo "⚠️  editor.js não encontrado"
+fi
+
 if [ -f "$PACKAGE_DIR/stubs/blocks.css" ]; then
     cp "$PACKAGE_DIR/stubs/blocks.css" "resources/css/blocks.css"
     echo "✅ blocks.css copiado"
@@ -100,6 +114,14 @@ if [ -f "$PACKAGE_DIR/sync-blocks.sh" ]; then
     echo "✅ sync-blocks.sh copiado"
 else
     echo "⚠️  sync-blocks.sh não encontrado"
+fi
+
+if [ -f "$PACKAGE_DIR/verify-system.sh" ]; then
+    cp "$PACKAGE_DIR/verify-system.sh" "verify-system.sh"
+    chmod +x "verify-system.sh"
+    echo "✅ verify-system.sh copiado"
+else
+    echo "⚠️  verify-system.sh não encontrado"
 fi
 
 echo ""

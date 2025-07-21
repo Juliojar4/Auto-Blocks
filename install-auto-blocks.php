@@ -69,6 +69,8 @@ function installSimplified() {
         'stubs/MakeBlockCommand.php' => 'app/Console/Commands/MakeBlockCommand.php',
         'stubs/SyncBlocksCommand.php' => 'app/Console/Commands/SyncBlocksCommand.php',
         'stubs/blocks.js' => 'resources/js/blocks.js',
+        'stubs/app.js' => 'resources/js/app.js',
+        'stubs/editor.js' => 'resources/js/editor.js',
         'stubs/blocks.css' => 'resources/css/blocks.css',
         'stubs/vite.config.js' => 'vite.config.js',
         'stubs/blocks.php' => 'resources/blocks.php'

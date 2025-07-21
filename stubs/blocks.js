@@ -14,4 +14,6 @@ import '../css/blocks.css';
 // Exemplo:
 // import '../blocks/meu-bloco/block.jsx';
 
+// AUTO-IMPORTS: Os blocos criados são importados automaticamente abaixo desta linha
+
 console.log('🎨 Auto Blocks - Sistema carregado!');
