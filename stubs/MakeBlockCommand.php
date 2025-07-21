@@ -45,6 +45,8 @@ class MakeBlockCommand extends Command
 
         try {
             $this->createBlock($blockSlug, $blockTitle);
+            $this->updateBlocksJs($blockSlug);
+            $this->updateBlockManager($blockSlug);
             
             $this->line("");
             $this->info("✅ Block '{$blockTitle}' created successfully!");
@@ -79,7 +81,7 @@ class MakeBlockCommand extends Command
             'icon' => 'block-default',
             'description' => "Custom {$title} block",
             'textdomain' => 'doctailwind',
-            'editorScript' => 'file:./block.js',
+            'editorScript' => 'file:./block.jsx',
             'style' => 'file:./block.css',
             'render' => 'file:./block.php'
         ];
@@ -89,7 +91,7 @@ class MakeBlockCommand extends Command
             json_encode($blockJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
         );
 
-        // Create block.js
+        // Create block.jsx
         $jsContent = "import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 
@@ -114,7 +116,7 @@ registerBlockType('doctailwind/{$slug}', {
     save: () => null // Server-side rendering
 });";
 
-        $this->files->put("{$blockPath}/block.js", $jsContent);
+        $this->files->put("{$blockPath}/block.jsx", $jsContent);
 
         // Create block.php
         $phpContent = "<?php
@@ -172,5 +174,81 @@ echo view('blocks.{$slug}', \$block_data)->render();";
 </div>";
 
         $this->files->put("{$bladePath}/{$slug}.blade.php", $bladeContent);
+    }
+
+    /**
+     * Update blocks.js to include new block import
+     */
+    protected function updateBlocksJs(string $slug): void
+    {
+        $blocksJsPath = resource_path('js/blocks.js');
+        
+        if (!$this->files->exists($blocksJsPath)) {
+            $this->error("❌ blocks.js file not found");
+            return;
+        }
+        
+        $content = $this->files->get($blocksJsPath);
+        $importLine = "import '../blocks/{$slug}/block.jsx';";
+        
+        // Check if import already exists
+        if (strpos($content, $importLine) !== false) {
+            return;
+        }
+        
+        // Add import after AUTO-IMPORTS comment or at the beginning
+        if (strpos($content, '// AUTO-IMPORTS:') !== false) {
+            $content = str_replace(
+                "// AUTO-IMPORTS: Created blocks are automatically imported below this line",
+                "// AUTO-IMPORTS: Created blocks are automatically imported below this line\n{$importLine}",
+                $content
+            );
+        } else {
+            // Add at the beginning
+            $content = "{$importLine}\n" . $content;
+        }
+        
+        $this->files->put($blocksJsPath, $content);
+        $this->line("✅ Updated: blocks.js");
+    }
+
+    /**
+     * Update BlockManager to include new block
+     */
+    protected function updateBlockManager(string $slug): void
+    {
+        $managerPath = app_path('Blocks/BlockManager.php');
+        
+        if (!$this->files->exists($managerPath)) {
+            $this->error("❌ BlockManager.php not found");
+            return;
+        }
+        
+        $content = $this->files->get($managerPath);
+        
+        // Check if block already exists
+        if (strpos($content, "'{$slug}'") !== false) {
+            return;
+        }
+        
+        // Find the blocks array and add the new block
+        $pattern = '/(protected\s+array\s+\$blocks\s*=\s*\[)(.*?)(\/\/\s*Add new blocks here.*?\n.*?)(];)/s';
+        
+        if (preg_match($pattern, $content, $matches)) {
+            $beforeComment = $matches[2];
+            $comment = $matches[3];
+            $end = $matches[4];
+            
+            // Add the new block before the closing bracket
+            $newBlock = "        '{$slug}',\n    ";
+            $newContent = str_replace(
+                $matches[0],
+                $matches[1] . $beforeComment . $comment . $newBlock . $end,
+                $content
+            );
+            
+            $this->files->put($managerPath, $newContent);
+            $this->line("✅ Updated: BlockManager.php");
+        }
     }
 }
