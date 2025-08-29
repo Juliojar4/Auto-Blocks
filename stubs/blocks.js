@@ -1,18 +1,12 @@
 /**
- * Main file to register all custom blocks
+ * Auto Blocks - Main registration file
  * 
- * Blocks will be automatically imported when created via:
- * lando wp acorn make:block block-name --with-js --with-css
- * or
- * wp acorn make:block block-name --with-js --with-css
+ * Block imports are automatically added when you create new blocks using:
+ * php artisan make:block my-block-name
  */
 
-// Import global styles for blocks in editor
+// Import global block styles
 import '../css/blocks.css';
-
-// Block imports will be automatically added here
-// Example:
-// import '../blocks/my-block/block.jsx';
 
 // AUTO-IMPORTS: Created blocks are automatically imported below this line
 

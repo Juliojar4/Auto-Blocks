@@ -8,7 +8,7 @@ class BlockManager
      * Folders under resources/blocks (each must contain a block.json).
      */
     protected array $blocks = [
-        // Add your blocks here
+        // Blocks are automatically added here when you run: php artisan make:block block-name
     ];
 
     /**

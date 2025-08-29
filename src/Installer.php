@@ -192,11 +192,15 @@ class Installer
             return 'copy';
         }
         
+        // Special handling for blocks.js - never overwrite, only create if missing
+        if ($destination === 'resources/js/blocks.js') {
+            return 'skip'; // Always skip if blocks.js exists
+        }
+        
         // Check if it's a critical system file that should be updated
         $systemFiles = [
             'app/Console/Commands/MakeBlockCommand.php',
-            'app/Console/Commands/SyncBlocksCommand.php',
-            'resources/js/blocks.js'
+            'app/Console/Commands/SyncBlocksCommand.php'
         ];
         
         if (in_array($destination, $systemFiles)) {

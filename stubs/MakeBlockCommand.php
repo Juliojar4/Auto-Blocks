@@ -184,8 +184,10 @@ echo view('blocks.{$slug}', \$block_data)->render();";
         $blocksJsPath = resource_path('js/blocks.js');
         
         if (!$this->files->exists($blocksJsPath)) {
-            $this->error("❌ blocks.js file not found");
-            return;
+            // Create blocks.js if it doesn't exist
+            $initialContent = "// Auto Blocks - Block imports are automatically added here\n// AUTO-IMPORTS: Created blocks are automatically imported below this line\n";
+            $this->files->put($blocksJsPath, $initialContent);
+            $this->line("✅ Created: blocks.js");
         }
         
         $content = $this->files->get($blocksJsPath);
@@ -193,10 +195,11 @@ echo view('blocks.{$slug}', \$block_data)->render();";
         
         // Check if import already exists
         if (strpos($content, $importLine) !== false) {
+            $this->line("⚠️  Import for '{$slug}' already exists in blocks.js");
             return;
         }
         
-        // Add import after AUTO-IMPORTS comment or at the beginning
+        // Add import after AUTO-IMPORTS comment
         if (strpos($content, '// AUTO-IMPORTS:') !== false) {
             $content = str_replace(
                 "// AUTO-IMPORTS: Created blocks are automatically imported below this line",
@@ -204,12 +207,13 @@ echo view('blocks.{$slug}', \$block_data)->render();";
                 $content
             );
         } else {
-            // Add at the beginning
-            $content = "{$importLine}\n" . $content;
+            // If no AUTO-IMPORTS comment, add it and the import
+            $autoImportSection = "\n// AUTO-IMPORTS: Created blocks are automatically imported below this line\n{$importLine}\n";
+            $content = $content . $autoImportSection;
         }
         
         $this->files->put($blocksJsPath, $content);
-        $this->line("✅ Updated: blocks.js");
+        $this->line("✅ Added import for '{$slug}' to blocks.js");
     }
 
     /**
@@ -228,27 +232,39 @@ echo view('blocks.{$slug}', \$block_data)->render();";
         
         // Check if block already exists
         if (strpos($content, "'{$slug}'") !== false) {
+            $this->line("⚠️  Block '{$slug}' already exists in BlockManager");
             return;
         }
         
-        // Find the blocks array and add the new block
-        $pattern = '/(protected\s+array\s+\$blocks\s*=\s*\[)(.*?)(\/\/\s*Add new blocks here.*?\n.*?)(];)/s';
+        // Pattern to find the blocks array
+        $pattern = '/(protected\s+array\s+\$blocks\s*=\s*\[\s*)(.*?)(\s*];)/s';
         
         if (preg_match($pattern, $content, $matches)) {
-            $beforeComment = $matches[2];
-            $comment = $matches[3];
-            $end = $matches[4];
+            $arrayStart = $matches[1];
+            $arrayContent = $matches[2];
+            $arrayEnd = $matches[3];
             
-            // Add the new block before the closing bracket
-            $newBlock = "        '{$slug}',\n    ";
+            // Remove the comment and add the new block
+            $cleanContent = trim(str_replace(['// Add your blocks here', '// Add new blocks here'], '', $arrayContent));
+            
+            if (empty($cleanContent)) {
+                // First block
+                $newArrayContent = "\n        '{$slug}',\n    ";
+            } else {
+                // Add to existing blocks
+                $newArrayContent = $arrayContent . "\n        '{$slug}',";
+            }
+            
             $newContent = str_replace(
                 $matches[0],
-                $matches[1] . $beforeComment . $comment . $newBlock . $end,
+                $arrayStart . $newArrayContent . $arrayEnd,
                 $content
             );
             
             $this->files->put($managerPath, $newContent);
-            $this->line("✅ Updated: BlockManager.php");
+            $this->line("✅ Added '{$slug}' to BlockManager.php");
+        } else {
+            $this->error("❌ Could not find blocks array in BlockManager.php");
         }
     }
 }
