@@ -6,8 +6,6 @@
 // Import main CSS styles
 import '../css/app.css';
 
-// Import block JavaScript for frontend
-import './blocks';
 
 // Your custom JavaScript code here
 console.log('🎨 App loaded - Frontend');

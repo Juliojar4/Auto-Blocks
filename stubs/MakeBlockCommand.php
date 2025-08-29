@@ -75,12 +75,12 @@ class MakeBlockCommand extends Command
 
         // Create block.json
         $blockJson = [
-            'name' => "doctailwind/{$slug}",
+            'name' => "sage/{$slug}",
             'title' => $title,
             'category' => 'design',
             'icon' => 'block-default',
             'description' => "Custom {$title} block",
-            'textdomain' => 'doctailwind',
+            'textdomain' => 'sage',
             'editorScript' => 'file:./block.jsx',
             'style' => 'file:./block.css',
             'render' => 'file:./block.php'
@@ -95,7 +95,7 @@ class MakeBlockCommand extends Command
         $jsContent = "import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps, RichText } from '@wordpress/block-editor';
 
-registerBlockType('doctailwind/{$slug}', {
+registerBlockType('sage/{$slug}', {
     edit: ({ attributes, setAttributes }) => {
         const { content } = attributes;
         const blockProps = useBlockProps();

@@ -131,14 +131,37 @@ class Installer
             }
             
             if (file_exists($sourcePath)) {
-                if (!file_exists($destPath) || self::shouldOverwrite($sourcePath, $destPath)) {
-                    if (copy($sourcePath, $destPath)) {
-                        $io->write("  ✅ Copied: {$destination}");
-                    } else {
-                        $io->writeError("  ❌ Error copying: {$destination}");
-                    }
-                } else {
-                    $io->write("  ⏭️ Skipped (already exists and is newer): {$destination}");
+                $action = self::determineFileAction($sourcePath, $destPath, $destination);
+                
+                switch ($action) {
+                    case 'copy':
+                        if (copy($sourcePath, $destPath)) {
+                            $io->write("  ✅ Copied: {$destination}");
+                        } else {
+                            $io->writeError("  ❌ Error copying: {$destination}");
+                        }
+                        break;
+                        
+                    case 'update':
+                        if (self::updateExistingFile($sourcePath, $destPath, $destination)) {
+                            $io->write("  🔄 Updated: {$destination}");
+                        } else {
+                            $io->write("  ⚠️  Could not safely update: {$destination} (manual review needed)");
+                        }
+                        break;
+                        
+                    case 'skip':
+                        $io->write("  ⏭️  Skipped (user modified): {$destination}");
+                        break;
+                        
+                    case 'backup':
+                        $backupPath = $destPath . '.backup.' . date('Y-m-d-H-i-s');
+                        if (copy($destPath, $backupPath) && copy($sourcePath, $destPath)) {
+                            $io->write("  🔄 Updated with backup: {$destination} (backup: " . basename($backupPath) . ")");
+                        } else {
+                            $io->writeError("  ❌ Error creating backup for: {$destination}");
+                        }
+                        break;
                 }
             } else {
                 $io->writeError("  ❌ Source file not found: {$source}");
@@ -157,6 +180,140 @@ class Installer
         
         // Overwrite if source file is newer
         return filemtime($sourcePath) > filemtime($destPath);
+    }
+    
+    /**
+     * Determine what action to take with a file
+     */
+    protected static function determineFileAction(string $sourcePath, string $destPath, string $destination): string
+    {
+        // If file doesn't exist, copy it
+        if (!file_exists($destPath)) {
+            return 'copy';
+        }
+        
+        // Check if it's a critical system file that should be updated
+        $systemFiles = [
+            'app/Console/Commands/MakeBlockCommand.php',
+            'app/Console/Commands/SyncBlocksCommand.php',
+            'resources/js/blocks.js'
+        ];
+        
+        if (in_array($destination, $systemFiles)) {
+            return 'backup'; // Always backup and update system files
+        }
+        
+        // Special handling for BlockManager - preserve user's block list
+        if ($destination === 'app/Blocks/BlockManager.php') {
+            return self::fileWasModifiedByUser($destPath) ? 'update' : 'copy';
+        }
+        
+        // Special handling for vite.config.js - merge configuration
+        if ($destination === 'vite.config.js') {
+            return self::fileWasModifiedByUser($destPath) ? 'update' : 'backup';
+        }
+        
+        // For other files, check if user modified them
+        if (self::fileWasModifiedByUser($destPath)) {
+            return 'skip';
+        }
+        
+        // If source is newer, update
+        if (filemtime($sourcePath) > filemtime($destPath)) {
+            return 'copy';
+        }
+        
+        return 'skip';
+    }
+    
+    /**
+     * Check if file was modified by user (basic heuristic)
+     */
+    protected static function fileWasModifiedByUser(string $filePath): bool
+    {
+        if (!file_exists($filePath)) {
+            return false;
+        }
+        
+        $content = file_get_contents($filePath);
+        
+        // Check for common user modifications
+        $userModificationSignals = [
+            '// Custom',
+            '// User',
+            '// Modified',
+            '// Added by',
+            'TODO:',
+            'FIXME:',
+            '// My',
+        ];
+        
+        foreach ($userModificationSignals as $signal) {
+            if (stripos($content, $signal) !== false) {
+                return true;
+            }
+        }
+        
+        // Check if BlockManager has custom blocks
+        if (strpos($filePath, 'BlockManager.php') !== false) {
+            // If there are blocks in the array, user probably added them
+            if (preg_match('/protected\s+array\s+\$blocks\s*=\s*\[\s*[\'"][^\'"]+/', $content)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Update existing file while preserving user modifications
+     */
+    protected static function updateExistingFile(string $sourcePath, string $destPath, string $destination): bool
+    {
+        if ($destination === 'app/Blocks/BlockManager.php') {
+            return self::updateBlockManager($sourcePath, $destPath);
+        }
+        
+        if ($destination === 'vite.config.js') {
+            return self::updateViteConfig($sourcePath, $destPath);
+        }
+        
+        return false; // For other files, manual review needed
+    }
+    
+    /**
+     * Update BlockManager while preserving user's block list
+     */
+    protected static function updateBlockManager(string $sourcePath, string $destPath): bool
+    {
+        $sourceContent = file_get_contents($sourcePath);
+        $destContent = file_get_contents($destPath);
+        
+        // Extract user's block list
+        if (preg_match('/protected\s+array\s+\$blocks\s*=\s*(\[.*?\]);/s', $destContent, $matches)) {
+            $userBlocks = $matches[1];
+            
+            // Replace the blocks array in source with user's blocks
+            $updatedContent = preg_replace(
+                '/protected\s+array\s+\$blocks\s*=\s*\[.*?\];/s',
+                "protected array \$blocks = $userBlocks;",
+                $sourceContent
+            );
+            
+            return file_put_contents($destPath, $updatedContent) !== false;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Update vite.config.js while preserving user modifications
+     */
+    protected static function updateViteConfig(string $sourcePath, string $destPath): bool
+    {
+        // For vite.config.js, it's safer to create a backup and let user merge manually
+        // since Vite configs can be highly customized
+        return false;
     }
     
     /**
