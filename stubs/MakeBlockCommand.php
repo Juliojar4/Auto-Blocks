@@ -101,8 +101,8 @@ registerBlockType('sage/{$slug}', {
         const blockProps = useBlockProps();
         
         return (
-            <div {...blockProps} className=\"{$slug}-block-editor bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-dashed border-purple-200 rounded-xl p-8 \">
-                <h3 className=\"text-lg font-bold mb-2\">{$title}</h3>
+            <div {...blockProps} className=\"{$slug}-block-editor mb-10 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-dashed border-blue-200 rounded-xl pt-0 pb-8 px-8 \">
+                <h3 className=\"text-base color-[#575757] !font-sans font-bold mb-2\">{$title}</h3>
                 <RichText
                     tagName=\"div\"
                     value={content}
@@ -132,33 +132,6 @@ registerBlockType('sage/{$slug}', {
 echo view('blocks.{$slug}', \$block_data)->render();";
 
         $this->files->put("{$blockPath}/block.php", $phpContent);
-
-        // Create block.css
-        $cssContent = ".{$slug}-block {
-    padding: 1.5rem;
-    margin: 1rem 0;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.{$slug}-block h3 {
-    margin: 0 0 1rem 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #374151;
-}
-
-.{$slug}-block-editor {
-    background: #f9fafb;
-    border: 2px dashed #d1d5db !important;
-}
-
-.{$slug}-block-editor:hover {
-    border-color: #3b82f6 !important;
-}";
-
-        $this->files->put("{$blockPath}/block.css", $cssContent);
 
         // Create Blade template
         $bladePath = resource_path("views/blocks");
