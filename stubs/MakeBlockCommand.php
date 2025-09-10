@@ -101,7 +101,7 @@ registerBlockType('sage/{$slug}', {
         const blockProps = useBlockProps();
         
         return (
-            <div {...blockProps} className=\"{$slug}-block-editor p-4 border-2 border-dashed border-gray-300 rounded\">
+            <div {...blockProps} className=\"{$slug}-block-editor bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-dashed border-purple-200 rounded-xl p-8 \">
                 <h3 className=\"text-lg font-bold mb-2\">{$title}</h3>
                 <RichText
                     tagName=\"div\"
