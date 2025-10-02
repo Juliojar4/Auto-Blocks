@@ -2,7 +2,7 @@
 
 Complete system for creating custom Gutenberg blocks in WordPress themes using Sage/Acorn + Laravel.
 
-## � System Flow
+## ⚙️ System Flow
 
 ```mermaid
 graph TD
@@ -47,7 +47,7 @@ graph TD
     style W fill:#fce4ec
 ```
 
-## �🚀 Installation
+## 🎯 Installation
 
 ### Prerequisites
 - WordPress 6.0+
@@ -140,60 +140,6 @@ After installation, the following files and directories will be created:
 📄 verify-system.sh              # Script to verify installation
 ```
 
-## 🏗️ Architecture Diagram
-
-```mermaid
-graph TB
-    subgraph "🎯 WordPress Integration"
-        WP[WordPress Core]
-        GB[Gutenberg Editor]
-        AC[Acorn Framework]
-    end
-
-    subgraph "📦 Auto Blocks System"
-        BM[BlockManager.php<br/>📋 Block Registry]
-        CMD[Commands<br/>🔧 Make & Sync]
-        VITE[vite.config.js<br/>⚙️ Build Config]
-    end
-
-    subgraph "🎨 Block Assets"
-        JS[blocks.js<br/>⚡ Main Entry]
-        CSS[blocks.css<br/>🎨 Global Styles]
-        BLOCKS[resources/blocks/<br/>📁 Block Folders]
-    end
-
-    subgraph "🧩 Individual Block"
-        BJ[block.json<br/>📋 Block Definition]
-        BJS[block.jsx<br/>⚡ Block Logic]
-        BCSS[block.css<br/>🎨 Block Styles]
-        BTPL[block.blade.php<br/>📄 Block Template]
-    end
-
-    WP --> BM
-    BM --> GB
-    AC --> CMD
-    CMD --> BM
-    CMD --> JS
-    VITE --> JS
-    VITE --> CSS
-    JS --> BLOCKS
-    CSS --> BLOCKS
-    BLOCKS --> BJ
-    BLOCKS --> BJS
-    BLOCKS --> BCSS
-    BLOCKS --> BTPL
-
-    style WP fill:#e3f2fd
-    style BM fill:#f3e5f5
-    style CMD fill:#e8f5e8
-    style VITE fill:#fff3e0
-    style JS fill:#fce4ec
-    style BJ fill:#e1f5fe
-    style BJS fill:#f1f8e9
-    style BCSS fill:#fff8e1
-    style BTPL fill:#fce4ec
-```
-
 ## 🎯 Usage Example
 
 ### 1. Create a block
@@ -212,43 +158,6 @@ yarn build
 - Search for "Promotional Banner"
 - Add and configure!
 
-## 📈 Block Creation Flow
-
-```mermaid
-sequenceDiagram
-    participant Dev as Developer
-    participant CMD as MakeBlockCommand
-    participant FS as File System
-    participant BM as BlockManager
-    participant BJS as blocks.js
-    participant VITE as Vite
-    participant WP as WordPress
-
-    Dev->>CMD: php artisan make:block hero-banner
-    CMD->>FS: Create resources/blocks/hero-banner/
-    FS-->>CMD: Directory created
-    CMD->>FS: Create block.json, block.jsx, block.css, block.blade.php
-    FS-->>CMD: Files created
-
-    CMD->>BM: Add 'hero-banner' to blocks array
-    BM-->>CMD: Block registered
-
-    CMD->>BJS: Add import '../blocks/hero-banner/block.jsx'
-    BJS-->>CMD: Import added
-
-    CMD-->>Dev: ✅ Block created successfully!
-
-    Dev->>VITE: yarn build
-    VITE->>FS: Process block assets
-    FS-->>VITE: Assets compiled
-
-    VITE-->>Dev: ✅ Build complete!
-
-    Dev->>WP: Open Gutenberg Editor
-    WP->>BM: Load registered blocks
-    BM-->>WP: hero-banner available
-    WP-->>Dev: Block ready to use!
-```
 
 ## 🔧 Available Commands
 
@@ -309,86 +218,6 @@ bash verify-system.sh
 - ✅ Lando (optional, but recommended)
 
 ## 🛠️ Technology Stack
-
-```mermaid
-mindmap
-  root((🎨 Auto Blocks))
-    WordPress
-      Gutenberg
-        Block API
-        Block Editor
-    PHP
-      Laravel
-        Acorn Framework
-          Artisan Commands
-      Composer
-        Package Management
-        Auto Installation
-    JavaScript
-      React
-        JSX Syntax
-        Component Logic
-      ES6 Modules
-        Import/Export
-        Dynamic Loading
-    CSS
-      Tailwind CSS
-        Utility Classes
-        Responsive Design
-      PostCSS
-        Autoprefixer
-        CSS Processing
-    Build Tools
-      Vite
-        Fast HMR
-        Asset Bundling
-      Node.js
-        npm/yarn
-        Script Execution
-    Development
-      WP-CLI
-        Command Line
-        Theme Management
-      Lando
-        Local Development
-        Container Management
-```
-
-## 🆘 Support
-
-If you encounter issues:
-
-1. ✅ Check if you're in the theme root directory
-2. ✅ Confirm that Sage/Acorn is configured
-3. ✅ Run the manual installation scripts
-4. ✅ Verify that all files were created
-5. ✅ Run `yarn build` after changes
-
-## 🔍 Troubleshooting Guide
-
-```mermaid
-flowchart TD
-    A[❌ Problem Occurred] --> B{What type of error?}
-    
-    B -->|Command not found| C[Check if in theme directory]
-    B -->|Build error| D[Run yarn build]
-    B -->|Block not showing| E[Check blocks.js imports]
-    B -->|Installation failed| F[Run install script manually]
-    
-    C --> G[✅ Fixed?]
-    D --> G
-    E --> H[Run bash sync-blocks.sh]
-    F --> I[Check file permissions]
-    
-    H --> G
-    I --> G
-    
-    G -->|Yes| J[🎉 Success!]
-    G -->|No| K[📋 Check Requirements]
-    K --> L[📞 Contact Support]
-```
-
-## 🎉 Result
 
 After successful installation, you will have:
 
