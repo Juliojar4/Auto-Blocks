@@ -39,12 +39,7 @@ graph TD
     AA --> CC[📋 WordPress Registry]
     BB --> DD[🎯 Block Available]
 
-    style A fill:#e1f5fe
-    style B fill:#f3e5f5
-    style C fill:#f3e5f5
-    style I fill:#e8f5e8
-    style R fill:#fff3e0
-    style W fill:#fce4ec
+     
 ```
 
 ## 🎯 Installation
