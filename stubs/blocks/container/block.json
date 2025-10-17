@@ -1,0 +1,49 @@
+{
+    "name": "sage/container",
+    "title": "Container",
+    "blade": "container.blade.php",
+    "category": "wmbb",
+    "icon": "editor-table",
+    "description": "Flexible container with padding controls for desktop and mobile",
+    "textdomain": "sage",
+    "editorScript": "file:./block.jsx",
+    "style": "file:./block.css",
+    "render": "file:./block.php",
+    "supports": {
+        "align": ["wide", "full"],
+        "anchor": true,
+        "className": true
+    },
+    "attributes": {
+        "addBottomBorder": {
+            "type": "boolean",
+            "default": false
+        },
+        "backgroundColor": {
+            "type": "string",
+            "default": "transparent"
+        },
+        "useGrid": {
+            "type": "boolean",
+            "default": false
+        },
+        "paddingTop": {
+            "type": "string",
+            "default": "40"
+        },
+        "paddingBottom": {
+            "type": "string",
+            "default": "40"
+        },
+        "fullWidth": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "example": {
+        "attributes": {
+            "paddingDesktop": "py-16",
+            "backgroundColor": "transparent"
+        }
+    }
+}

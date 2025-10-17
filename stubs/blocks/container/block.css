@@ -1,0 +1,13 @@
+.grid-container .wp-block-sage-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem; /* 32px gap between blocks */
+}
+
+
+@media (max-width: 1024px) {
+    .grid-container .wp-block-sage-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem; /* 24px gap between rows */
+    }
+}
