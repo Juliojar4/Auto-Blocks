@@ -1,0 +1,56 @@
+{
+    "name": "sage/paragraph",
+    "title": "Paragraph",
+    "blade": "paragraph.blade.php",
+    "category": "wmbb",
+    "icon": "editor-paragraph",
+    "description": "Custom Paragraph block with font style options",
+    "textdomain": "sage",
+    "attributes": {
+        "content": {
+            "type": "string",
+            "default": ""
+        },
+ 
+        "fontClass": {
+            "type": "string",
+            "default": "paragraph-normal"
+        },
+        "textColor": {
+            "type": "string",
+            "default": "black"
+        },
+        "marginBottom": {
+            "type": "string",
+            "default": "mb-4"
+        },
+        "fontFamily": {
+            "type": "string",
+            "default": "forza"
+        },
+        "enableAnimation": {
+            "type": "boolean",
+            "default": true
+        },
+        "animationDelay": {
+            "type": "number",
+            "default": 0
+        },
+        "animationType": {
+            "type": "string",
+            "default": "fade-up"
+        }
+    },
+    "editorScript": "file:./block.jsx",
+    "style": "file:./block.css",
+    "render": "file:./block.php",
+    "example": {
+        "attributes": {
+            "content": "This is an example paragraph with custom styling options.",
+            "fontClass": "paragraph-normal",
+            "textColor": "black",
+            "marginBottom": "mb-4",
+            "fontFamily": "forza"
+        }
+    }
+}
